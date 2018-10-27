@@ -16,7 +16,7 @@ void prepare_hough(HoughTrans &hough) {
   param.rho_max = 400;
   param.theta_max = 180.0;
   param.rho_res = 1.0;
-  param.theta_res = 0.1;
+  param.theta_res = 0.5;
   param.vote_thresh = 1;
   param.score_thresh = 1;
 
@@ -88,12 +88,16 @@ int main(int argc, char** argv) {
 
   // 3. Show Image
   cv::imshow("Sample", img);
+  cv::imwrite("init.png", img);
   cv::waitKey(0);
 
   // 4. Hough Voting.
   std::vector<LineElem> lines;
   cv::threshold(img, img, 50, 255, cv::THRESH_BINARY);
   cv::bitwise_not(img, img);
+  cv::imshow("Binarized", img);
+  cv::imwrite("binarized.png", img);
+  cv::waitKey(0);
   hough.get_lines(img, lines);
 
   // 5. Draw Line in image.
@@ -110,7 +114,9 @@ int main(int argc, char** argv) {
   cv::Mat res;
   hough.get_voted_img(res);
   cv::imshow("Hough Vote", res);
+  cv::imwrite("vote_res.png", res);
   cv::imshow("Result", cImg);
+  cv::imwrite("res.png", cImg);
   cv::waitKey(0);
 
   return 0;
