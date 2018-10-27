@@ -45,22 +45,49 @@ void calc_pnt_in_img(double rho, double theta, cv::Point2i &p1, cv::Point2i &p2)
   p2.y = y2;
 }
 
+void recv_file_path(std::string &path) {
+
+  do {
+    std::cin >> path;
+    std::ifstream ifs(path); 
+
+    if (ifs.is_open()) {
+      break;
+    }
+
+    std::cout << "The specified file can not be opened. Please enter again. " << std::endl;
+
+  } while (true);
+  
+}
+
+void recv_console_input(std::string &path) {
+
+  std::cout << "Please enter image path." << std::endl;
+  recv_file_path(path);
+  return;
+}
+
+
 int main(int argc, char** argv) {
 
   std::cout << "Hough Trans Started!" << std::endl;
 
+  
   // 0. Create Hough Object.
+  std::string path;
+  recv_console_input(path);
   HoughTrans hough;
 
   // 1. Prepare Hough Object.
   prepare_hough(hough);
 
   // 2. Load Image
-  cv::Mat img = cv::imread("/home/koichi/workspace/algo_practice/sample_data/simple/sample.png", cv::IMREAD_GRAYSCALE);
-  cv::Mat cImg = cv::imread("/home/koichi/workspace/algo_practice/sample_data/simple/sample.png", cv::IMREAD_UNCHANGED);
+  cv::Mat img = cv::imread(path, cv::IMREAD_GRAYSCALE);
+  cv::Mat cImg = cv::imread(path, cv::IMREAD_UNCHANGED);
 
   // 3. Show Image
-  cv::imshow("Boeing", img);
+  cv::imshow("Sample", img);
   cv::waitKey(0);
 
   // 4. Hough Voting.
